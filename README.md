@@ -26,6 +26,6 @@ An **Open Source** Chrome Extension that has simple tools to help you with BigId
 
 
     
-## About Me
-I'm a 14 years old, and I love to code. I am mainly a Javascript or front end developer. 
+## Disclaimer
+This is not to be used for cheating in school or anywhere else. This is a personal project and it takes no responsibility for any actions taken against its users.
 
