@@ -1,0 +1,40 @@
+{
+    "manifest_version": 2,
+    "name": "BigIdeas Toolkit",
+    "version": "1.0",
+    "description": "Automatically get help with or solve BigIdeas math assignments!",
+    "icons": {
+        "48": "icon.png"
+    },
+    "permissions": [
+        "webRequest",
+        "<all_urls>",
+        "webRequestBlocking",
+        "activeTab",
+        "storage"
+    ],
+    "browser_action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html",
+        "default_title": "BigIdeas Toolkit"
+    },
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": true
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.bigideasmath.com/*"
+            ],
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "web_accessible_resources": [
+        "/assets/copy.webp"
+    ]
+}
