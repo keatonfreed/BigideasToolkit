@@ -27,5 +27,5 @@ An **Open Source** Chrome Extension that has simple tools to help you with BigId
 
     
 ## Disclaimer
-This is not to be used for cheating in school or anywhere else. This is a personal project and it takes no responsibility for any actions taken against its users.
+This is NOT to be used for any form of cheating, in school or anywhere else. This is meant for personal use only, and only according to the terms of service of BigIdeas.
 
