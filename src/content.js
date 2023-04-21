@@ -43,6 +43,8 @@ document.body.onload = async () => {
         }
         if (request.action === "setAnswers") {
             globalAnswers = request.data
+            console.log("Recieved Answers:")
+            console.log(request.data)
             setInterval(() => { updateAnswers() }, 10)
         }
     });
@@ -89,11 +91,11 @@ document.body.onload = async () => {
         if (!showAns) {
             return
         }
-        let thisQuest = document.querySelector(`[data-reference='${String(questIdEl.textContent)}'].item`)
-        let questions = thisQuest?.querySelectorAll('.lrn_response_input') || [];
-        for (let i = 0; i < questions.length; i++) {
-            let textInputs = questions[i]?.querySelectorAll('.lrn_textinput') || [];
-            let thisTextAnswers = globalAnswers[String(questIdEl.textContent)].answers.filter(answer => answer.type === "text")[i].value;
+        let thisPage = document.querySelector(`[data-reference='${String(questIdEl.textContent)}'].item`)
+        let inputQuestions = thisPage?.querySelectorAll('.lrn_response_input') || [];
+        for (let i = 0; i < inputQuestions.length; i++) {
+            let textInputs = inputQuestions[i]?.querySelectorAll('.lrn_textinput') || [];
+            let thisTextAnswers = globalAnswers[String(questIdEl.textContent)].answers.filter(answer => answer.type === "text")[i]?.value;
             for (let j = 0; j < textInputs.length; j++) {
                 let textField = textInputs[j];
                 let thisTextAnswer = thisTextAnswers[j];
@@ -143,16 +145,34 @@ document.body.onload = async () => {
                     })
                 }
             }
-        }
 
-        let multiChoices = thisQuest?.querySelectorAll('.lrn_mcqgroup') || [];
+            let dropInputs = inputQuestions[i]?.querySelectorAll('.lrn-cloze-select') || [];
+            let thisDropAnswers = globalAnswers[String(questIdEl.textContent)].answers.filter(answer => answer.type === "dropdown")[i]?.value;
+            for (let i = 0; i < dropInputs.length; i++) {
+                let dropEl = dropInputs[i];
+                let choices = dropEl.childNodes;
+                let dropAns = thisDropAnswers[i]
+                if (dropAns && !dropEl.querySelector('.answerDisplay')) {
+                    for (let j = 0; j < choices.length; j++) {
+                        if (choices[j].value === dropAns) {
+                            choices[j].style.fontWeight = 'bold'
+                            choices[j].answerDel = (el) => {
+                                el.style.fontWeight = ''
+                            };
+                        }
+                    }
+                }
+            }
+
+        }
+        let multiChoices = thisPage?.querySelectorAll('.lrn_mcqgroup') || [];
         for (let i = 0; i < multiChoices.length; i++) {
-            let thisChoiceAnswers = globalAnswers[String(questIdEl.textContent)].answers.filter(answer => answer.type === "choice")[i].value;
+            let thisChoiceAnswers = globalAnswers[String(questIdEl.textContent)].answers.filter(answer => answer.type === "choice")[i]?.value;
             let choiceEl = multiChoices[i];
             let choices = choiceEl.childNodes;
-            for (let j = 0; j < choices.length; j++) {
-                if (thisChoiceAnswers && !choices[j].classList.contains('answerDisplay')) {
-                    if (thisChoiceAnswers.includes(choices[j].querySelector('input').value)) {
+            if (thisChoiceAnswers) {
+                for (let j = 0; j < choices.length; j++) {
+                    if (!choices[j].classList.contains('answerDisplay') && thisChoiceAnswers.includes(choices[j].querySelector('input').value)) {
                         choices[j].style.outline = '2px solid gray';
                         choices[j].answerDel = (el) => {
                             el.style.outline = ''
@@ -163,21 +183,5 @@ document.body.onload = async () => {
             }
         }
 
-        let dropChoices = thisQuest?.querySelectorAll('.lrn-cloze-select') || [];
-        for (let i = 0; i < dropChoices.length; i++) {
-            let thisDropAnswer = globalAnswers[String(questIdEl.textContent)].answers.filter(answer => answer.type === "dropdown")[i].value[0];
-            let dropEl = dropChoices[i];
-            if (thisDropAnswer && !dropEl.querySelector('.answerDisplay')) {
-                let choices = dropEl.childNodes;
-                for (let i = 0; i < choices.length; i++) {
-                    if (choices[i].value === thisDropAnswer) {
-                        choices[i].style.fontWeight = 'bold'
-                        choices[i].answerDel = (el) => {
-                            el.style.fontWeight = ''
-                        };
-                    }
-                }
-            }
-        }
     }
 }
