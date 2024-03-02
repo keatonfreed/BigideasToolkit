@@ -20,9 +20,10 @@ document.body.onload = async () => {
     let checkAns = false;
     let showMenu = false;
 
-    chrome.storage.local.get(['showCalc', 'showAns', 'checkAns'], (result) => {
+    chrome.storage.local.get(['showCalc', 'showAns', 'checkAns','showMenu'], (result) => {
         showAns = result.showAns || false;
         showCalc = result.showCalc || false;
+        showMenu = result.showMenu || false;
         check = result.showCalc || false;
         updateCalculator()
     });
@@ -55,7 +56,7 @@ document.body.onload = async () => {
         }
         if (request.action === "toggleMenu") {
             showMenu = request.data
-            updateMenu()
+            updateAnswers()
         }
         if (request.action === "setAnswers") {
             let icon = document.getElementById('BIToolkit')
@@ -71,6 +72,7 @@ document.body.onload = async () => {
             console.log("Recieved Answers:")
             console.log(request.data)
             setInterval(() => { updateAnswers() }, 500)
+            updateAnswers()
             const styleTag = document.head.appendChild(document.createElement('style'));
             styleTag.textContent = `
                 .dragAnswerDisplay:has(~ .lrn_draggable:not(.gu-transit)) {display:none}
